@@ -1,0 +1,56 @@
+name: Baseline
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  repository-baseline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify required handoff files
+        shell: bash
+        run: |
+          set -euo pipefail
+          required=(
+            README.md
+            CONTRIBUTING.md
+            CHANGELOG.md
+            docs/DESIGN_BASELINE.md
+            docs/ARCHITECTURE_BOUNDARY.md
+            docs/CODEX_HANDOFF.md
+            docs/ACCEPTANCE_CRITERIA.md
+            docs/ADR-0001-core-domain-before-catalog.md
+            docs/ADR-0002-initial-technical-stack.md
+            prototype/README.md
+            src/README.md
+            tests/README.md
+            assets/brand/README.md
+          )
+          for file in "${required[@]}"; do
+            test -s "$file" || { echo "Missing or empty: $file"; exit 1; }
+          done
+
+      - name: Guard core design principles
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q "Organization charts are not the primary classification" docs/DESIGN_BASELINE.md
+          grep -q "Access scope and reuse conditions" docs/DESIGN_BASELINE.md
+          grep -q "CKAN is optional" docs/DESIGN_BASELINE.md
+          grep -q "Version 5 is read-only reference material" docs/CODEX_HANDOFF.md
+
+      - name: Check Markdown whitespace
+        shell: bash
+        run: |
+          if grep -RInE '[[:blank:]]+$' --include='*.md' .              --exclude-dir=.git; then
+            echo "Trailing whitespace found."
+            exit 1
+          fi
