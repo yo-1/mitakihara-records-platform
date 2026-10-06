@@ -1,0 +1,41 @@
+name: Implementation task
+description: Design-traceable implementation task
+title: "[Implementation] "
+body:
+  - type: textarea
+    id: purpose
+    attributes:
+      label: Purpose
+    validations:
+      required: true
+  - type: textarea
+    id: design
+    attributes:
+      label: Design basis
+      description: Reference DESIGN_BASELINE, ADR, acceptance criterion, or approved specification.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: Files/modules and behavior to change.
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification
+      description: Automated tests and/or manual verification.
+    validations:
+      required: true
+  - type: textarea
+    id: completion
+    attributes:
+      label: Completion criteria
+    validations:
+      required: true
+  - type: textarea
+    id: remaining
+    attributes:
+      label: Unverified / remaining
